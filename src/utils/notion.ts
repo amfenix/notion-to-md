@@ -1,6 +1,15 @@
-import { Client } from "@notionhq/client";
-import { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
+//import { Client } from "@notionhq/client";
+import {ListBlockChildrenParameters, ListBlockChildrenResponse} from "@notionhq/client/build/src/api-endpoints";
 import { ListBlockChildrenResponseResults } from "../types";
+
+export interface Client {
+    getBlockChildren: (args: ListBlockChildrenParameters) => Promise<ListBlockChildrenResponse>;
+}
+
+export type {
+  ListBlockChildrenParameters,
+  ListBlockChildrenResponse,
+};
 
 export const getBlockChildren = async (
   notionClient: Client,
@@ -12,7 +21,7 @@ export const getBlockChildren = async (
   let start_cursor = undefined;
 
   do {
-    const response = (await notionClient.blocks.children.list({
+    const response = (await notionClient.getBlockChildren({
       start_cursor: start_cursor,
       block_id: block_id,
     })) as ListBlockChildrenResponse;

@@ -1,9 +1,10 @@
-import { Client } from "@notionhq/client";
+//import { Client } from "@notionhq/client";
 import * as MarkdownUtils from "../utils/md";
 import type {
   ListBlockChildrenResponse,
   GetBlockParameters,
 } from "@notionhq/client/build/src/api-endpoints";
+import {Client} from "../utils/notion";
 
 export type BlockAttributes = {
   numbered_list_item?: {

@@ -48,5 +48,8 @@
   "dependencies": {
     "markdown-table": "^2.0.0",
     "node-fetch": "2"
+  },
+  "peerDependencies": {
+    "@notionhq/client": "^1.0.1"
   }
 }
