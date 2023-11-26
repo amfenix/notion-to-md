@@ -16,6 +16,8 @@ import {
 import * as md from "./utils/md";
 import { getBlockChildren } from "./utils/notion";
 
+export const markdown = md;
+
 /**
  * Converts a Notion page to Markdown.
  */
@@ -90,6 +92,15 @@ export class NotionToMarkdown {
             nestingLevel
           )}\n`;
         }
+      }
+
+      if (mdBlocks.type === "child_page" && !!this.customTransformers[mdBlocks.type]) {
+        mdOutput[pageIdentifier] = mdOutput[pageIdentifier] || "";
+
+        mdOutput[pageIdentifier] += `\n${md.addTabSpace(
+            mdBlocks.parent,
+            nestingLevel
+        )}\n\n`;
       }
 
       // process child blocks
@@ -266,7 +277,7 @@ export class NotionToMarkdown {
     let parsedData = "";
     const { type } = block;
     if (type in this.customTransformers && !!this.customTransformers[type]) {
-      const customTransformerValue = await this.customTransformers[type](block);
+      const customTransformerValue = await this.customTransformers[type](block, md);
       if (typeof customTransformerValue === "string")
         return customTransformerValue;
     }
@@ -414,8 +425,25 @@ export class NotionToMarkdown {
                 } as ListBlockChildrenResponseResult)
             );
 
-            const cellStringArr = await Promise.all(cellStringPromise);
-            tableArr.push(cellStringArr);
+            let cellStringArr = await Promise.all(cellStringPromise);
+            let columns: string[][] = [];
+            cellStringArr.forEach((cellString) => {
+              const cellRows: string[] = cellString.split('\n').map((s: string) => s.trim());
+              columns.push(cellRows);
+            });
+            let rowsFromColumns: string[][] = [];
+            let maxColumnSize: number = Math.max(...columns.map(c => c.length));
+            for (let i = 0; i< maxColumnSize; i++) {
+                let row: string[] = [];
+                columns.forEach((c) => {
+                    row.push(c[i] || '');
+                });
+                rowsFromColumns.push(row);
+            }
+            rowsFromColumns.forEach((row) => {
+                tableArr.push(row);
+            });
+            //tableArr.push(cellStringArr);
           });
           await Promise.all(rowsPromise || []);
         }

@@ -144,3 +144,7 @@ package-lock.json
 demo.ts
 test.md
 test.json
+
+# editors
+.idea
+.vscode

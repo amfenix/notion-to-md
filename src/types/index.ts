@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import * as MarkdownUtils from "../utils/md";
 import type {
   ListBlockChildrenResponse,
   GetBlockParameters,
@@ -142,5 +143,6 @@ export type CalloutIcon =
   | null;
 
 export type CustomTransformer = (
-  block: ListBlockChildrenResponseResult
+  block: ListBlockChildrenResponseResult,
+  md: typeof MarkdownUtils
 ) => string | boolean | Promise<string | boolean>;

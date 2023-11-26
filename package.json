@@ -4,7 +4,7 @@
   "engines": {
     "node": ">=12"
   },
-  "main": "./build",
+  "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
     "prepare": "npm run build",

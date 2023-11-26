@@ -1,4 +1,4 @@
-import { NotionToMarkdown } from "./notion-to-md";
+import { NotionToMarkdown, markdown } from "./notion-to-md";
 
 describe("setCustomTransformer", () => {
   test("blockToMarkdown sends parsing block to customTransformer", () => {
@@ -15,6 +15,9 @@ describe("setCustomTransformer", () => {
       expect.objectContaining({
         type: "test",
         test: { foo: "bar" },
+      }),
+      expect.objectContaining({
+        ...markdown
       })
     );
   });
